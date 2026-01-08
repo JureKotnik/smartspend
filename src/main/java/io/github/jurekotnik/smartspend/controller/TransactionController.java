@@ -24,7 +24,7 @@ public class TransactionController {
     }
 
     @PostMapping
-    public Transaction createTransaction(@Valid@RequestBody Transaction transaction) {
+    public Transaction createTransaction(@Valid @RequestBody Transaction transaction) {
         return repository.save(transaction);
     }
 }
