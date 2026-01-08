@@ -26,5 +26,9 @@ public class Transaction {
 
     @PastOrPresent(message = "Date cannot be in the future")
     private LocalDate date;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
     
 }
