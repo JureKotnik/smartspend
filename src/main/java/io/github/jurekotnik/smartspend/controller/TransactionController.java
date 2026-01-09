@@ -27,4 +27,11 @@ public class TransactionController {
     public Transaction createTransaction(@Valid @RequestBody Transaction transaction) {
         return repository.save(transaction);
     }
+
+    @GetMapping("/{id}")
+    public Transaction getTransactionById(@PathVariable Long id) {
+       return repository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Transaction not found with id: " + id));
+    }
+    
 }
