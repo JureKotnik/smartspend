@@ -1,37 +1,40 @@
 package io.github.jurekotnik.smartspend.controller;
 
 import io.github.jurekotnik.smartspend.entity.Transaction;
-import io.github.jurekotnik.smartspend.repository.TransactionRepository;
+import io.github.jurekotnik.smartspend.service.TransactionService; // Import Service, not Repository
 import jakarta.validation.Valid;
-
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/transactions")
 public class TransactionController {
 
-    private final TransactionRepository repository;
+    // 👇 CHANGED: We use 'service', NOT 'repository'
+    private final TransactionService service;
 
-    public TransactionController(TransactionRepository repository) {
-        this.repository = repository;
+    // Constructor Injection
+    public TransactionController(TransactionService service) {
+        this.service = service;
+    }
+
+    @GetMapping("/balance")
+    public Double getBalance() {
+        return service.getTotalBalance();
     }
 
     @GetMapping
-    public List<Transaction> getAllTransactions() {
-        return repository.findAll();
-    }
-
-    @PostMapping
-    public Transaction createTransaction(@Valid @RequestBody Transaction transaction) {
-        return repository.save(transaction);
+    public List<Transaction> getAll() {
+        return service.getAllTransactions();
     }
 
     @GetMapping("/{id}")
     public Transaction getTransactionById(@PathVariable Long id) {
-       return repository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Transaction not found with id: " + id));
+        return service.getTransactionById(id);
     }
-    
+
+    @PostMapping
+    public Transaction create(@Valid @RequestBody Transaction transaction) {
+        return service.saveTransaction(transaction);
+    }
 }

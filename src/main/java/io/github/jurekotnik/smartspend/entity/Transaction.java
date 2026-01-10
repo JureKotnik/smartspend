@@ -24,11 +24,14 @@ public class Transaction {
     @Positive(message = "Amount must be greater than zero")
     private Double amount;
 
+    @Column(nullable = false)
+    @NotBlank(message = "Type is required (INCOME or EXPENSE)")
+    private String type; 
+
     @PastOrPresent(message = "Date cannot be in the future")
     private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
-    
 }
