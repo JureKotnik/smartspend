@@ -1,11 +1,27 @@
-version: '3.8'
 services:
-  db:
+  postgres:
     image: postgres:15
     container_name: smartspend-db
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=smartspend
+      POSTGRES_USER: smartspend
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: smartspend
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: . 
+    container_name: smartspend-backend
+    ports:
+      - "8080:8080" 
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/smartspend
+      SPRING_DATASOURCE_USERNAME: smartspend
+      SPRING_DATASOURCE_PASSWORD: password
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
